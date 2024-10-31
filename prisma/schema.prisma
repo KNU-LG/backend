@@ -13,8 +13,143 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ColorTheme {
+  DARK
+  LIGHT
+}
+
+enum ScreenMode {
+  IMAGE
+  WIDGET
+}
+
+enum WidgetSize {
+  L
+  M
+  S
+}
+
+enum WidgetColor {
+  DEFAULT
+  WHITE
+  BLACK
+}
+
+enum ClockDesign {
+  DIGITAL
+  ANALOG
+}
+
 model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
+  login_id String
   name  String?
+  password String
+  theme ColorTheme
+  mode ScreenMode
+  weatherWidgetSetting WeatherWidgetSetting[]
+  calendarWidgetSetting CalendarWidgetSetting[]
+  musicPlayWidgetSetting MusicPlayWidgetSetting[]
+  clockWidgetSetting ClockWidgetSetting[]
+  slideShow SlideShow[]
+  media Media[]
+  Schedule Schedule[]
+  Music Music[]
+}
+
+model SettingCommon {
+  id Int @default(autoincrement()) @id
+  positionX Int
+  positionY Int
+  size WidgetSize
+  color WidgetColor
+
+  weatherWidgetSetting WeatherWidgetSetting?
+  calendarWidgetSetting CalendarWidgetSetting?
+
+  musicPlayWidgetSetting MusicPlayWidgetSetting[]
+
+  clockWidgetSetting ClockWidgetSetting[]
+}
+
+model WeatherWidgetSetting {
+  id Int @default(autoincrement()) @id
+  location String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  settingCommon SettingCommon @relation(fields: [settingCommonid], references: [id])
+  settingCommonid Int @unique
+}
+
+model CalendarWidgetSetting {
+  id Int @default(autoincrement()) @id
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  settingCommon SettingCommon @relation(fields: [settingCommonId], references: [id])
+  settingCommonId Int @unique
+
+  schedule Schedule[]
+}
+
+model MusicPlayWidgetSetting {
+  id Int @default(autoincrement()) @id
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  settingCommon SettingCommon @relation(fields: [settingCommonId], references: [id])
+  settingCommonId Int @unique
+
+  music Music[]
+}
+
+model ClockWidgetSetting {
+  id Int @default(autoincrement()) @id
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  settingCommon SettingCommon @relation(fields: [settingCommonId], references: [id])
+  settingCommonId Int @unique
+  design ClockDesign
+  timezone Int
+}
+
+model SlideShowImage {
+  id Int @default(autoincrement()) @id
+  slideShow SlideShow @relation(fields: [slideShowid], references: [id])
+  slideShowid Int
+}
+
+model SlideShow {
+  id Int @default(autoincrement()) @id
+  name String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+
+  slideShowImage SlideShowImage[]
+}
+
+model Media {
+  uuid String @default(uuid()) @id
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+
+  Music Music?
+}
+
+model Schedule {
+  id Int @default(autoincrement()) @id
+  date DateTime
+  title String
+  content String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  calendarWidget CalendarWidgetSetting[]
+}
+
+model Music {
+  id Int @default(autoincrement()) @id
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  media Media @relation(fields: [mediauuid], references: [uuid])
+  mediauuid String @unique
+  musicPlayWidget MusicPlayWidgetSetting[]
 }
