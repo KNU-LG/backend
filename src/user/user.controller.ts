@@ -4,11 +4,15 @@ import {
   Controller,
   Get,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { APIResponse } from 'src/type';
 import { UserRequest } from './user.dto';
 import { User } from '@prisma/client';
+import { AuthGuard } from './auth.guard';
+import { ApiSecurity } from '@nestjs/swagger';
 
 export type UserResponse = string;
 
@@ -17,8 +21,10 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUserAll() {
-    return this.userService.getUserAll();
+  @ApiSecurity('authorization')
+  @UseGuards(AuthGuard)
+  async getUser(@Request() req) {
+    return req.user;
   }
 
   @Post('register')

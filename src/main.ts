@@ -12,6 +12,15 @@ async function bootstrap() {
     .setTitle('capstone1 backend')
     .setDescription('종합설계프로젝트1 백엔드 API문서')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'JWT',
+        in: 'header',
+      },
+      'authorization',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('document', app, document);
