@@ -8,6 +8,7 @@ import {
 import { UserService } from './user.service';
 import { APIResponse } from 'src/type';
 import { UserRequest } from './user.dto';
+import { User } from '@prisma/client';
 
 export type UserResponse = string;
 
@@ -24,8 +25,9 @@ export class UserController {
   async register(
     @Body() userRequest: UserRequest,
   ): Promise<APIResponse<UserResponse>> {
+    let user: User;
     try {
-      await this.userService.register(userRequest);
+      user = await this.userService.register(userRequest);
     } catch (error) {
       throw new BadRequestException({
         message: '중복 아이디',
@@ -39,7 +41,11 @@ export class UserController {
       message: 'success',
       error: '',
       statusCode: 201,
-      data: await this.userService.login(userRequest.loginId),
+      data: await this.userService.login(
+        user.id,
+        user.login_id,
+        userRequest.passWord,
+      ),
     };
   }
 }

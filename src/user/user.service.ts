@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserRequest } from './user.dto';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,11 +16,14 @@ export class UserService {
   }
 
   async register(userRequest: UserRequest) {
-    await this.prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         email: userRequest.email,
         login_id: userRequest.loginId,
-        password: userRequest.passWord,
+        password: await bcrypt.hash(
+          userRequest.passWord,
+          parseInt(process.env.PASSWORD_ROUND, 10),
+        ),
         name: userRequest.name,
         mode: 'WIDGET',
         theme: 'LIGHT',
@@ -27,9 +31,15 @@ export class UserService {
     });
   }
 
-  async login(loginId: string) {
+  async login(id: number, loginId: string, password: string) {
+    const user = await this.prisma.user.findFirst({ where: { id: id } });
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw Error('password different');
+    }
     return await this.jwtService.signAsync({
+      id: id,
       loginId: loginId,
+      name: user.name,
     });
   }
 }
