@@ -31,13 +31,15 @@ export class UserService {
     });
   }
 
-  async login(id: number, loginId: string, password: string) {
-    const user = await this.prisma.user.findFirst({ where: { id: id } });
+  async login(loginId: string, password: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { login_id: loginId },
+    });
     if (!bcrypt.compareSync(password, user.password)) {
       throw Error('password different');
     }
     return await this.jwtService.signAsync({
-      id: id,
+      id: user.id,
       loginId: loginId,
       name: user.name,
     });
