@@ -2,14 +2,24 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
+  Param,
+  ParseIntPipe,
+  Patch,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { APIResponse } from 'src/type';
-import { LoginRequest, LoginResponse, UserRequest } from './user.dto';
+import {
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  LoginRequest,
+  LoginResponse,
+  UserRequest,
+} from './user.dto';
 import { User } from '@prisma/client';
 import { AuthGuard } from './auth.guard';
 import { ApiSecurity } from '@nestjs/swagger';
@@ -75,6 +85,52 @@ export class UserController {
       error: '',
       statusCode: 201,
       data: token,
+    };
+  }
+
+  validateUserId(requestUserId: number, jwtUserId: number) {
+    if (requestUserId != jwtUserId) {
+      throw new ForbiddenException({
+        message: '잘못된 유저 접근',
+        error: '',
+        statusCode: 403,
+        data: null,
+      });
+    }
+    return true;
+  }
+
+  @Patch(':userId/password')
+  @ApiSecurity('authorization')
+  @UseGuards(AuthGuard)
+  async changePassword(
+    @Body() changePasswordRequest: ChangePasswordRequest,
+    @Request() req,
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<APIResponse<ChangePasswordResponse>> {
+    this.validateUserId(userId, req.user.id);
+    try {
+      await this.userService.login(
+        req.user.loginId,
+        changePasswordRequest.oldPassword,
+      );
+    } catch (error) {
+      throw new BadRequestException({
+        message: '잘못된 현재 비밀번호',
+        error: error.toString(),
+        statusCode: 400,
+        data: null,
+      });
+    }
+    await this.userService.changePassword(
+      req.user.id,
+      changePasswordRequest.newPassword,
+    );
+    return {
+      message: 'success',
+      error: '',
+      data: null,
+      statusCode: 200,
     };
   }
 }

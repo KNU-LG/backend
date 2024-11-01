@@ -19,3 +19,12 @@ export class LoginRequest {
 }
 
 export type LoginResponse = string;
+
+export class ChangePasswordRequest {
+  @ApiProperty()
+  newPassword: string;
+  @ApiProperty()
+  oldPassword: string;
+}
+
+export type ChangePasswordResponse = null;
