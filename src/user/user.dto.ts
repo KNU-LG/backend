@@ -10,3 +10,12 @@ export class UserRequest {
   @ApiProperty()
   name: string;
 }
+
+export class LoginRequest {
+  @ApiProperty()
+  loginId: string;
+  @ApiProperty()
+  passWord: string;
+}
+
+export type LoginResponse = string;

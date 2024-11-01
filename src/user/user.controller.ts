@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { APIResponse } from 'src/type';
-import { UserRequest } from './user.dto';
+import { LoginRequest, LoginResponse, UserRequest } from './user.dto';
 import { User } from '@prisma/client';
 import { AuthGuard } from './auth.guard';
 import { ApiSecurity } from '@nestjs/swagger';
@@ -47,11 +47,34 @@ export class UserController {
       message: 'success',
       error: '',
       statusCode: 201,
-      data: await this.userService.login(
-        user.id,
-        user.login_id,
-        userRequest.passWord,
-      ),
+      data: await this.userService.login(user.login_id, userRequest.passWord),
+    };
+  }
+
+  @Post('login')
+  async login(
+    @Body() loginRequest: LoginRequest,
+  ): Promise<APIResponse<LoginResponse>> {
+    let token: string;
+    try {
+      token = await this.userService.login(
+        loginRequest.loginId,
+        loginRequest.passWord,
+      );
+    } catch (error) {
+      throw new BadRequestException({
+        message: '잘못된 비밀번호',
+        error: error.toString(),
+        statusCode: 400,
+        data: null,
+      });
+    }
+
+    return {
+      message: 'success',
+      error: '',
+      statusCode: 201,
+      data: token,
     };
   }
 }
