@@ -20,10 +20,7 @@ export class UserService {
       data: {
         email: userRequest.email,
         login_id: userRequest.loginId,
-        password: await bcrypt.hash(
-          userRequest.passWord,
-          parseInt(process.env.PASSWORD_ROUND, 10),
-        ),
+        password: this.hashPassword(userRequest.passWord),
         name: userRequest.name,
         mode: 'WIDGET',
         theme: 'LIGHT',
@@ -42,6 +39,21 @@ export class UserService {
       id: user.id,
       loginId: loginId,
       name: user.name,
+    });
+  }
+
+  hashPassword(password: string) {
+    return bcrypt.hashSync(password, parseInt(process.env.PASSWORD_ROUND, 10));
+  }
+
+  async changePassword(id: number, password: string) {
+    await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: this.hashPassword(password),
+      },
     });
   }
 }
