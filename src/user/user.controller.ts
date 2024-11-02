@@ -19,6 +19,7 @@ import {
   LoginRequest,
   LoginResponse,
   UserRequest,
+  UpdateUserRequest,
 } from './user.dto';
 import { User } from '@prisma/client';
 import { AuthGuard } from './auth.guard';
@@ -126,6 +127,24 @@ export class UserController {
       req.user.id,
       changePasswordRequest.newPassword,
     );
+    return {
+      message: 'success',
+      error: '',
+      data: null,
+      statusCode: 200,
+    };
+  }
+
+  @Patch(':userId')
+  @ApiSecurity('authorization')
+  @UseGuards(AuthGuard)
+  async updateUser(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() updateUserRequest: UpdateUserRequest,
+    @Request() req,
+  ): Promise<APIResponse<UserResponse>> {
+    this.validateUserId(userId, req.user.id); 
+    const updatedUser = await this.userService.updateUser(userId, updateUserRequest);
     return {
       message: 'success',
       error: '',

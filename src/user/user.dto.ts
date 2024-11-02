@@ -27,4 +27,11 @@ export class ChangePasswordRequest {
   oldPassword: string;
 }
 
+export class UpdateUserRequest {
+  @ApiProperty()
+  newEmail: string;
+  @ApiProperty()
+  newName: string;
+}
+
 export type ChangePasswordResponse = null;
