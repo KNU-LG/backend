@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRequest } from './user.dto';
+import { UpdateUserRequest, UserRequest } from './user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -53,6 +53,16 @@ export class UserService {
       },
       data: {
         password: this.hashPassword(password),
+      },
+    });
+  }
+
+  async updateUser(id: number, updateUserRequest: UpdateUserRequest) {
+    return await this.prisma.user.update({
+      where: { id: id },
+      data: {
+        email: updateUserRequest.newEmail,
+        name: updateUserRequest.newName,
       },
     });
   }
