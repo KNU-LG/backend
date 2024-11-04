@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdateUserRequest, UserRequest } from './user.dto';
+import { UpdateUserRequest, RegisterRequest } from './user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -15,12 +15,12 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  async register(userRequest: UserRequest) {
+  async register(userRequest: RegisterRequest) {
     return await this.prisma.user.create({
       data: {
         email: userRequest.email,
-        login_id: userRequest.loginId,
-        password: this.hashPassword(userRequest.passWord),
+        loginId: userRequest.loginId,
+        password: this.hashPassword(userRequest.password),
         name: userRequest.name,
         mode: 'WIDGET',
         theme: 'LIGHT',
@@ -30,7 +30,7 @@ export class UserService {
 
   async login(loginId: string, password: string) {
     const user = await this.prisma.user.findFirst({
-      where: { login_id: loginId },
+      where: { loginId: loginId },
     });
     if (!bcrypt.compareSync(password, user.password)) {
       throw Error('password different');
@@ -60,10 +60,15 @@ export class UserService {
   async updateUser(id: number, updateUserRequest: UpdateUserRequest) {
     return await this.prisma.user.update({
       where: { id: id },
-      data: {
-        email: updateUserRequest.newEmail,
-        name: updateUserRequest.newName,
+      select: {
+        id: true,
+        loginId: true,
+        email: true,
+        theme: true,
+        mode: true,
+        name: true,
       },
+      data: updateUserRequest,
     });
   }
 }

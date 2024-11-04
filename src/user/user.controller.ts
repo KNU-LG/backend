@@ -8,24 +8,25 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { APIResponse } from 'src/type';
 import {
   ChangePasswordRequest,
   ChangePasswordResponse,
   LoginRequest,
   LoginResponse,
-  UserRequest,
+  RegisterRequest,
+  RegisterResponse,
   UpdateUserRequest,
+  UpdateUserResponse,
 } from './user.dto';
 import { User } from '@prisma/client';
 import { AuthGuard } from './auth.guard';
 import { ApiSecurity } from '@nestjs/swagger';
-
-export type UserResponse = string;
+import { APIResponse } from 'src/type';
 
 @Controller('user')
 export class UserController {
@@ -40,8 +41,8 @@ export class UserController {
 
   @Post('register')
   async register(
-    @Body() userRequest: UserRequest,
-  ): Promise<APIResponse<UserResponse>> {
+    @Body() userRequest: RegisterRequest,
+  ): Promise<APIResponse<RegisterResponse>> {
     let user: User;
     try {
       user = await this.userService.register(userRequest);
@@ -58,7 +59,9 @@ export class UserController {
       message: 'success',
       error: '',
       statusCode: 201,
-      data: await this.userService.login(user.login_id, userRequest.passWord),
+      data: {
+        token: await this.userService.login(user.loginId, userRequest.password),
+      },
     };
   }
 
@@ -70,7 +73,7 @@ export class UserController {
     try {
       token = await this.userService.login(
         loginRequest.loginId,
-        loginRequest.passWord,
+        loginRequest.password,
       );
     } catch (error) {
       throw new BadRequestException({
@@ -85,7 +88,7 @@ export class UserController {
       message: 'success',
       error: '',
       statusCode: 201,
-      data: token,
+      data: { token: token },
     };
   }
 
@@ -135,20 +138,23 @@ export class UserController {
     };
   }
 
-  @Patch(':userId')
+  @Put(':userId')
   @ApiSecurity('authorization')
   @UseGuards(AuthGuard)
   async updateUser(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() updateUserRequest: UpdateUserRequest,
     @Request() req,
-  ): Promise<APIResponse<UserResponse>> {
-    this.validateUserId(userId, req.user.id); 
-    const updatedUser = await this.userService.updateUser(userId, updateUserRequest);
+  ): Promise<APIResponse<UpdateUserResponse>> {
+    this.validateUserId(userId, req.user.id);
+    const updatedUser = await this.userService.updateUser(
+      userId,
+      updateUserRequest,
+    );
     return {
       message: 'success',
       error: '',
-      data: null,
+      data: updatedUser,
       statusCode: 200,
     };
   }

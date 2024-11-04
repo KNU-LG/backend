@@ -1,24 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { $Enums } from '@prisma/client';
 
-export class UserRequest {
+export class RegisterRequest {
   @ApiProperty()
   loginId: string;
   @ApiProperty()
-  passWord: string;
+  password: string;
   @ApiProperty()
   email: string;
   @ApiProperty()
   name: string;
 }
 
+export class RegisterResponse {
+  @ApiProperty()
+  token: string;
+}
+
 export class LoginRequest {
   @ApiProperty()
   loginId: string;
   @ApiProperty()
-  passWord: string;
+  password: string;
 }
 
-export type LoginResponse = string;
+export class LoginResponse {
+  @ApiProperty()
+  token: string;
+}
 
 export class ChangePasswordRequest {
   @ApiProperty()
@@ -29,9 +38,28 @@ export class ChangePasswordRequest {
 
 export class UpdateUserRequest {
   @ApiProperty()
-  newEmail: string;
+  email: string;
   @ApiProperty()
-  newName: string;
+  name: string;
+  @ApiProperty()
+  theme: $Enums.ColorTheme;
+  @ApiProperty()
+  mode: $Enums.ScreenMode;
 }
 
-export type ChangePasswordResponse = null;
+export class ChangePasswordResponse {}
+
+export class UpdateUserResponse {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  loginId: string;
+  @ApiProperty()
+  email: string;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  theme: $Enums.ColorTheme;
+  @ApiProperty()
+  mode: $Enums.ScreenMode;
+}

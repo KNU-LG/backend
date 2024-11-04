@@ -43,7 +43,7 @@ enum ClockDesign {
 model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
-  login_id String @unique
+  loginId String @unique
   name  String? 
   password String
   theme ColorTheme
