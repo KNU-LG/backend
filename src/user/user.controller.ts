@@ -20,7 +20,6 @@ import {
   LoginResponse,
   UserRequest,
   UpdateUserRequest,
-  FindPasswordRequest,
 } from './user.dto';
 import { User } from '@prisma/client';
 import { AuthGuard } from './auth.guard';
@@ -88,15 +87,6 @@ export class UserController {
       statusCode: 201,
       data: token,
     };
-  }
-
-  @Post('find-password')
-  async sendResetCode(@Body() body: FindPasswordRequest) {
-    try {
-      return await this.userService.sendResetCode(body.email);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
   }
 
   validateUserId(requestUserId: number, jwtUserId: number) {

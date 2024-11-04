@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail } from 'class-validator';
 
 export class UserRequest {
   @ApiProperty()
@@ -20,11 +19,6 @@ export class LoginRequest {
 }
 
 export type LoginResponse = string;
-
-export class FindPasswordRequest {
-  @IsEmail()
-  email: string;
-}
 
 export class ChangePasswordRequest {
   @ApiProperty()

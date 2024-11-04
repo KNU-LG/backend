@@ -1,16 +1,14 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserRequest, UserRequest } from './user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    private readonly mailerService: MailerService
   ) {}
 
   async getUserAll() {
@@ -41,18 +39,6 @@ export class UserService {
       id: user.id,
       loginId: loginId,
       name: user.name,
-    });
-  }
-
-  async sendResetCode(email: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      throw new BadRequestException('등록되지 않은 이메일입니다.');
-    }
-  
-    await this.mailerService.sendMail({
-      to: email,
-      subject: '비밀번호 초기화 인증번호',
     });
   }
 
