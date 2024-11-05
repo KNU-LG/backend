@@ -65,3 +65,12 @@ export class GetUserResponse {
 }
 
 export class UpdateUserResponse extends GetUserResponse {}
+
+export class FindPasswordRequest {
+  @ApiProperty()
+  loginId: string;
+  @ApiProperty()
+  email: string;
+}
+
+export class FindPasswordResponse {}

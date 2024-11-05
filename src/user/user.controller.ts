@@ -4,6 +4,7 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Patch,
@@ -16,6 +17,8 @@ import { UserService } from './user.service';
 import {
   ChangePasswordRequest,
   ChangePasswordResponse,
+  FindPasswordRequest,
+  FindPasswordResponse,
   GetUserResponse,
   LoginRequest,
   LoginResponse,
@@ -167,5 +170,20 @@ export class UserController {
       data: updatedUser,
       statusCode: 200,
     };
+  }
+
+  @Post('find-password')
+  @HttpCode(200)
+  async findPassword(
+    @Body() findPasswordRequest: FindPasswordRequest,
+  ): Promise<APIResponse<FindPasswordResponse>> {
+    const user = await this.userService.getUserByEmailOrLoginId(
+      findPasswordRequest.email === '' ? undefined : findPasswordRequest.email,
+      findPasswordRequest.loginId === ''
+        ? undefined
+        : findPasswordRequest.loginId,
+    );
+    await this.userService.sendResetPasswordEmail(user.email);
+    return { message: 'success', error: '', data: {}, statusCode: 200 };
   }
 }
