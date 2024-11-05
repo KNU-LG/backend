@@ -15,6 +15,22 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
+  async getUserByIdWithoutPassword(id: number) {
+    return await this.prisma.user.findUnique({
+      select: {
+        id: true,
+        email: true,
+        mode: true,
+        name: true,
+        loginId: true,
+        theme: true,
+      },
+      where: {
+        id: id,
+      },
+    });
+  }
+
   async register(userRequest: RegisterRequest) {
     return await this.prisma.user.create({
       data: {

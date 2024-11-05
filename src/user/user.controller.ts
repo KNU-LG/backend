@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import {
   ChangePasswordRequest,
   ChangePasswordResponse,
+  GetUserResponse,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
@@ -32,11 +33,20 @@ import { APIResponse } from 'src/type';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get(':userId')
   @ApiSecurity('authorization')
   @UseGuards(AuthGuard)
-  async getUser(@Request() req) {
-    return req.user;
+  async getUser(
+    @Request() req,
+    @Param('userId', ParseIntPipe) id: number,
+  ): Promise<APIResponse<GetUserResponse>> {
+    this.validateUserId(id, req.user.id);
+    return {
+      message: 'success',
+      error: '',
+      statusCode: 200,
+      data: await this.userService.getUserByIdWithoutPassword(id),
+    };
   }
 
   @Post('register')

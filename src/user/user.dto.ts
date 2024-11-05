@@ -49,7 +49,7 @@ export class UpdateUserRequest {
 
 export class ChangePasswordResponse {}
 
-export class UpdateUserResponse {
+export class GetUserResponse {
   @ApiProperty()
   id: number;
   @ApiProperty()
@@ -63,3 +63,5 @@ export class UpdateUserResponse {
   @ApiProperty()
   mode: $Enums.ScreenMode;
 }
+
+export class UpdateUserResponse extends GetUserResponse {}
