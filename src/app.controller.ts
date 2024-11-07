@@ -57,4 +57,11 @@ export class AppController {
       data: data,
     };
   }
+
+  @Get('widget')
+  @ApiSecurity('authorization')
+  @UseGuards(AuthGuard)
+  async getWidget(@Request() req) {
+    return await this.appService.getWidget(req.user.id);
+  }
 }

@@ -14,4 +14,16 @@ export class AppService {
       data: { userId: userId, path: path },
     });
   }
+
+  async getWidget(userId: number) {
+    return await this.prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: {
+        calendarWidgetSetting: { include: { settingCommon: true } },
+        clockWidgetSetting: { include: { settingCommon: true } },
+        weatherWidgetSetting: { include: { settingCommon: true } },
+        musicPlayWidgetSetting: { include: { settingCommon: true } },
+      },
+    });
+  }
 }
