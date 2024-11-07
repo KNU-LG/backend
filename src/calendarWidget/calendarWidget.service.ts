@@ -18,6 +18,26 @@ export class CalendarWidgetService {
       select: {
         id: true,
         settingCommon: true,
+        schedule: true,
+      },
+    });
+  }
+
+  async isUserHasCalendarWidget(userId: number, calendarWidgetId: number) {
+    return (
+      (await this.prisma.calendarWidgetSetting.count({
+        where: { userId: userId, id: calendarWidgetId },
+      })) > 0
+    );
+  }
+
+  async getCalendarWidgetById(id: number) {
+    return await this.prisma.calendarWidgetSetting.findUniqueOrThrow({
+      where: { id: id },
+      select: {
+        id: true,
+        settingCommon: true,
+        schedule: true,
       },
     });
   }
