@@ -4,6 +4,8 @@ import {
   ClockWidgetSetting,
   MusicPlayWidgetSetting,
   WeatherWidgetSetting,
+  WidgetColor,
+  WidgetSize,
 } from '@prisma/client';
 
 export class UploadResponse {
@@ -16,8 +18,23 @@ export class UploadResponse {
 }
 
 export class GetWidgetResponse {
+  @ApiProperty()
   clockWidgetSetting: ClockWidgetSetting[];
+  @ApiProperty()
   calendarWidgetSetting: CalendarWidgetSetting[];
+  @ApiProperty()
   musicPlayWidgetSetting: MusicPlayWidgetSetting[];
+  @ApiProperty()
   weatherWidgetSetting: WeatherWidgetSetting[];
+}
+
+export class WidgetCommonDto {
+  @ApiProperty()
+  positionX: number;
+  @ApiProperty()
+  positionY: number;
+  @ApiProperty()
+  size: WidgetSize;
+  @ApiProperty()
+  color: WidgetColor;
 }
