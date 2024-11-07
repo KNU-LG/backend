@@ -5,6 +5,9 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
 import { UserModule } from './user/user.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { env } from 'process';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,6 +26,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       },
     }),
     UserModule,
+    ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
