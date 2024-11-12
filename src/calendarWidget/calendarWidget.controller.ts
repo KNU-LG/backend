@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -16,6 +17,7 @@ import { AuthGuard } from 'src/user/auth.guard';
 import {
   CreateCalendarWidgetRequest,
   CreateCalendarWidgetResponse,
+  DeleteCalendarWidgetResponse,
   GetCalendarWidgetResponse,
   UpdateCalendarWidgetRequest,
   UpdateCalendarWidgetResponse,
@@ -97,6 +99,23 @@ export class CalendarWidgetController {
     );
     return {
       data: result,
+      error: '',
+      message: 'success',
+      statusCode: 200,
+    };
+  }
+
+  @Delete(':calendarWidgetId')
+  @ApiSecurity('authorization')
+  @UseGuards(AuthGuard)
+  async deleteCalendarWidget(
+    @Request() req,
+    @Param('calendarWidgetId', ParseIntPipe) id: number,
+  ): Promise<APIResponse<DeleteCalendarWidgetResponse>> {
+    await this.validateCalendarWidgetId(req.user.id, id);
+    await this.calendarWidgetService.deleteCalendarWidgetById(id);
+    return {
+      data: {},
       error: '',
       message: 'success',
       statusCode: 200,
