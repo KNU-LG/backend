@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCalendarWidgetRequest } from './calendarWidget.dto';
+import {
+  CreateCalendarWidgetRequest,
+  UpdateCalendarWidgetRequest,
+} from './calendarWidget.dto';
 
 @Injectable()
 export class CalendarWidgetService {
@@ -39,6 +42,31 @@ export class CalendarWidgetService {
         settingCommon: true,
         schedule: true,
       },
+    });
+  }
+
+  async updateCalendarWidgetById(
+    id: number,
+    data: UpdateCalendarWidgetRequest,
+  ) {
+    return await this.prisma.calendarWidgetSetting.update({
+      where: { id: id },
+      data: {
+        settingCommon: {
+          create: data.settimgCommon,
+        },
+      },
+      select: {
+        id: true,
+        settingCommon: true,
+        schedule: true,
+      },
+    });
+  }
+
+  async deleteCalendarWidgetById(id: number) {
+    return await this.prisma.calendarWidgetSetting.delete({
+      where: { id: id },
     });
   }
 }
