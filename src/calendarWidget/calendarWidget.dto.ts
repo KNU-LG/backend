@@ -24,3 +24,19 @@ export class GetCalendarWidgetResponse {
   @ApiProperty()
   schedule: Schedule[];
 }
+
+export class UpdateCalendarWidgetRequest {
+  @ApiProperty()
+  settimgCommon: WidgetCommonDto;
+}
+
+export class UpdateCalendarWidgetResponse {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  settingCommon: WidgetCommonDto;
+  @ApiProperty()
+  schedule: Schedule[];
+}
+
+export class DeleteCalendarWidgetResponse {}

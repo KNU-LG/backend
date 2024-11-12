@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,8 @@ import {
   CreateCalendarWidgetRequest,
   CreateCalendarWidgetResponse,
   GetCalendarWidgetResponse,
+  UpdateCalendarWidgetRequest,
+  UpdateCalendarWidgetResponse,
 } from './calendarWidget.dto';
 import { APIResponse } from 'src/type';
 
@@ -76,6 +79,27 @@ export class CalendarWidgetController {
       error: '',
       statusCode: 200,
       data: result,
+    };
+  }
+
+  @Put(':calendarWidgetId')
+  @ApiSecurity('authorization')
+  @UseGuards(AuthGuard)
+  async updateCalendarWidget(
+    @Request() req,
+    @Body() data: UpdateCalendarWidgetRequest,
+    @Param('calendarWidgetId', ParseIntPipe) id: number,
+  ): Promise<APIResponse<UpdateCalendarWidgetResponse>> {
+    await this.validateCalendarWidgetId(req.user.id, id);
+    const result = await this.calendarWidgetService.updateCalendarWidgetById(
+      id,
+      data,
+    );
+    return {
+      data: result,
+      error: '',
+      message: 'success',
+      statusCode: 200,
     };
   }
 }
