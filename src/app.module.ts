@@ -9,6 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { env } from 'process';
 import { join } from 'path';
 import { CalendarWidgetModule } from './calendarWidget/calenderWidget.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CalendarWidgetModule } from './calendarWidget/calenderWidget.module';
     }),
     UserModule,
     CalendarWidgetModule,
+    ScheduleModule,
     ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
   ],
   controllers: [AppController],

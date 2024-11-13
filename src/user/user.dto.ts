@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { $Enums } from '@prisma/client';
+import { IsEmail } from 'class-validator';
 
 export class RegisterRequest {
   @ApiProperty()
@@ -7,6 +8,7 @@ export class RegisterRequest {
   @ApiProperty()
   password: string;
   @ApiProperty()
+  @IsEmail()
   email: string;
   @ApiProperty()
   name: string;
@@ -38,6 +40,7 @@ export class ChangePasswordRequest {
 
 export class UpdateUserRequest {
   @ApiProperty()
+  @IsEmail()
   email: string;
   @ApiProperty()
   name: string;
@@ -70,6 +73,7 @@ export class FindPasswordRequest {
   @ApiProperty()
   loginId: string;
   @ApiProperty()
+  @IsEmail()
   email: string;
 }
 

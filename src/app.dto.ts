@@ -7,6 +7,7 @@ import {
   WidgetColor,
   WidgetSize,
 } from '@prisma/client';
+import { IsEnum } from 'class-validator';
 
 export class UploadResponse {
   @ApiProperty()
@@ -33,8 +34,10 @@ export class WidgetCommonDto {
   positionX: number;
   @ApiProperty()
   positionY: number;
-  @ApiProperty()
+  @ApiProperty({ enum: WidgetSize })
+  @IsEnum(WidgetSize)
   size: WidgetSize;
-  @ApiProperty()
+  @ApiProperty({ enum: WidgetColor })
+  @IsEnum(WidgetColor)
   color: WidgetColor;
 }
