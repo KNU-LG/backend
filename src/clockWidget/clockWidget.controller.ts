@@ -3,7 +3,11 @@ import {
     Post,
     Body,
     Request,
-    UseGuards
+    UseGuards,
+    ForbiddenException,
+    ParseIntPipe,
+    Param,
+    Get
 } from '@nestjs/common';
 import { ClockWidgetService } from './clockWidget.service';
 import { APIResponse } from 'src/type';
@@ -12,6 +16,7 @@ import { AuthGuard } from 'src/user/auth.guard';
 import { 
     CreateClockWidgetResponse,
     CreateClockWidgetRequest,
+    GetClockWidgetResponse,
  } from './clockWidget.dto';
 
 @Controller('widget/clock')
@@ -34,6 +39,43 @@ export class ClockWidgetController {
         message: 'success',
         error: '',
         statusCode: 201,
+      };
+    }
+
+    async validateClockWidgetId(
+      userId: number,
+      clockWidgetId: number,
+    ): Promise<boolean> {
+      if (
+        !(await this.clockWidgetService.isUserHasClockWidget(
+          userId,
+          clockWidgetId,
+        ))
+      ) {
+        throw new ForbiddenException({
+          data: {},
+          message: '잘못된 위젯 접근',
+          error: '사용자가 가지고 있는 위젯이 아님',
+          statusCode: 403,
+        });
+      }
+      return true;
+    }
+
+    @Get(':clockWidgetId')
+    @ApiSecurity('authorization')
+    @UseGuards(AuthGuard)
+    async getClockWidget(
+      @Request() req,
+      @Param('clockWidgetId', ParseIntPipe) id: number,
+    ): Promise<APIResponse<GetClockWidgetResponse>> {
+      await this.validateClockWidgetId(req.user.id, id);
+      const result = await this.clockWidgetService.getClockWidgetById(id);
+      return {
+        message: 'success',
+        error: '',
+        statusCode: 200,
+        data: result,
       };
     }
   }
