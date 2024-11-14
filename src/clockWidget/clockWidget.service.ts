@@ -3,6 +3,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateClockWidgetRequest } from './clockWidget.dto';
+import { ClockDesign } from '@prisma/client';
 
 @Injectable()
 export class ClockWidgetService {
@@ -33,7 +34,7 @@ export class ClockWidgetService {
               settingCommon: { create: data.settingCommon },
               user: { connect: { id: userId } },
               timezone: timezoneOffset,
-              design: null,
+              design: "ANALOG",
           },
           select: {
               id: true,

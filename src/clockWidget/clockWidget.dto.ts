@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ClockDesign } from '@prisma/client';
 import { WidgetCommonDto } from 'src/app.dto';
 
 export class CreateClockWidgetRequest {
@@ -16,7 +17,7 @@ export class CreateClockWidgetResponse {
   @ApiProperty()
   timezone: number;
   @ApiProperty()
-  design: string;
+  design: ClockDesign;
 }
 
 export class GetClockWidgetResponse {
