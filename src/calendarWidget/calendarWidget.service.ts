@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateCalendarWidgetRequest,
@@ -26,12 +26,23 @@ export class CalendarWidgetService {
     });
   }
 
-  async isUserHasCalendarWidget(userId: number, calendarWidgetId: number) {
-    return (
+  async validateUserHasCalendarWidget(
+    userId: number,
+    calendarWidgetId: number,
+  ) {
+    const result =
       (await this.prisma.calendarWidgetSetting.count({
         where: { userId: userId, id: calendarWidgetId },
-      })) > 0
-    );
+      })) > 0;
+    if (!result) {
+      throw new ForbiddenException({
+        data: {},
+        message: '잘못된 위젯 접근',
+        error: '사용자가 가지고 있는 위젯이 아님',
+        statusCode: 403,
+      });
+    }
+    return true;
   }
 
   async getCalendarWidgetById(id: number) {

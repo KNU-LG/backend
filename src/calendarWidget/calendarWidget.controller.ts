@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   Param,
   ParseIntPipe,
@@ -47,26 +46,6 @@ export class CalendarWidgetController {
     };
   }
 
-  async validateCalendarWidgetId(
-    userId: number,
-    calendarWidgetId: number,
-  ): Promise<boolean> {
-    if (
-      !(await this.calendarWidgetService.isUserHasCalendarWidget(
-        userId,
-        calendarWidgetId,
-      ))
-    ) {
-      throw new ForbiddenException({
-        data: {},
-        message: '잘못된 위젯 접근',
-        error: '사용자가 가지고 있는 위젯이 아님',
-        statusCode: 403,
-      });
-    }
-    return true;
-  }
-
   @Get(':calendarWidgetId')
   @ApiSecurity('authorization')
   @UseGuards(AuthGuard)
@@ -74,7 +53,10 @@ export class CalendarWidgetController {
     @Request() req,
     @Param('calendarWidgetId', ParseIntPipe) id: number,
   ): Promise<APIResponse<GetCalendarWidgetResponse>> {
-    await this.validateCalendarWidgetId(req.user.id, id);
+    await this.calendarWidgetService.validateUserHasCalendarWidget(
+      req.user.id,
+      id,
+    );
     const result = await this.calendarWidgetService.getCalendarWidgetById(id);
     return {
       message: 'success',
@@ -92,7 +74,10 @@ export class CalendarWidgetController {
     @Body() data: UpdateCalendarWidgetRequest,
     @Param('calendarWidgetId', ParseIntPipe) id: number,
   ): Promise<APIResponse<UpdateCalendarWidgetResponse>> {
-    await this.validateCalendarWidgetId(req.user.id, id);
+    await this.calendarWidgetService.validateUserHasCalendarWidget(
+      req.user.id,
+      id,
+    );
     const result = await this.calendarWidgetService.updateCalendarWidgetById(
       id,
       data,
@@ -112,7 +97,10 @@ export class CalendarWidgetController {
     @Request() req,
     @Param('calendarWidgetId', ParseIntPipe) id: number,
   ): Promise<APIResponse<DeleteCalendarWidgetResponse>> {
-    await this.validateCalendarWidgetId(req.user.id, id);
+    await this.calendarWidgetService.validateUserHasCalendarWidget(
+      req.user.id,
+      id,
+    );
     await this.calendarWidgetService.deleteCalendarWidgetById(id);
     return {
       data: {},
