@@ -43,4 +43,24 @@ export class ClockWidgetService {
           },
       });
   }
+
+  async isUserHasClockWidget(userId: number, clockWidgetId: number) {
+    return (
+      (await this.prisma.clockWidgetSetting.count({
+        where: { userId: userId, id: clockWidgetId },
+      })) > 0
+    );
+  }
+  
+  async getClockWidgetById(id: number) {
+    return await this.prisma.clockWidgetSetting.findUniqueOrThrow({
+      where: { id: id },
+      select: {
+        id: true,
+        settingCommon: true,
+        timezone: true,
+        design: true,
+      },
+    });
+  }
 }

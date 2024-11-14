@@ -18,3 +18,14 @@ export class CreateClockWidgetResponse {
   @ApiProperty()
   design: string;
 }
+
+export class GetClockWidgetResponse {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  settingCommon: WidgetCommonDto;
+  @ApiProperty()
+  timezone: number;
+  @ApiProperty()
+  design: string;
+}
