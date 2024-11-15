@@ -9,6 +9,7 @@ import {
     Param,
     Get,
     Put,
+    Delete,
 } from '@nestjs/common';
 import { ClockWidgetService } from './clockWidget.service';
 import { APIResponse } from 'src/type';
@@ -20,6 +21,7 @@ import {
     GetClockWidgetResponse,
     UpdateClockWidgetRequest,
     UpdateClockWidgetResponse,
+    DeleteClockWidgetResponse,
  } from './clockWidget.dto';
 
 @Controller('widget/clock')
@@ -97,6 +99,23 @@ export class ClockWidgetController {
       );
       return {
         data: result,
+        error: '',
+        message: 'success',
+        statusCode: 200,
+      };
+    }
+
+    @Delete(':clockWidgetId')
+    @ApiSecurity('authorization')
+    @UseGuards(AuthGuard)
+    async deleteClockWidget(
+    @Request() req,
+    @Param('clockWidgetId', ParseIntPipe) id: number,
+    ): Promise<APIResponse<DeleteClockWidgetResponse>> {
+      await this.validateClockWidgetId(req.user.id, id);
+      await this.clockWidgetService.deleteClockWidgetById(id);
+      return {
+        data: {},
         error: '',
         message: 'success',
         statusCode: 200,

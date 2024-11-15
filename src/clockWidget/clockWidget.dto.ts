@@ -46,3 +46,7 @@ export class UpdateClockWidgetResponse {
   @ApiProperty()
   design: string;
 }
+
+export class DeleteClockWidgetResponse {
+
+}
