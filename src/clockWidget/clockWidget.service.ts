@@ -2,7 +2,10 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateClockWidgetRequest } from './clockWidget.dto';
+import { 
+  CreateClockWidgetRequest,
+  UpdateClockWidgetRequest,
+ } from './clockWidget.dto';
 import { ClockDesign } from '@prisma/client';
 
 @Injectable()
@@ -62,6 +65,32 @@ export class ClockWidgetService {
         timezone: true,
         design: true,
       },
+    });
+  }
+
+  async updateClockWidgetById(
+    id: number,
+    data: UpdateClockWidgetRequest,
+  ) {
+    return await this.prisma.clockWidgetSetting.update({
+      where: { id: id },
+      data: {
+        settingCommon: {
+          create: data.settimgCommon,
+        },
+      },
+      select: {
+        id: true,
+        settingCommon: true,
+        timezone: true,
+        design: true,
+      },
+    });
+  }
+
+  async deleteClockWidgetById(id: number) {
+    return await this.prisma.clockWidgetSetting.delete({
+      where: { id: id },
     });
   }
 }

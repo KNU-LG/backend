@@ -30,3 +30,19 @@ export class GetClockWidgetResponse {
   @ApiProperty()
   design: string;
 }
+
+export class UpdateClockWidgetRequest {
+  @ApiProperty()
+  settimgCommon: WidgetCommonDto;
+}
+
+export class UpdateClockWidgetResponse {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  settingCommon: WidgetCommonDto;
+  @ApiProperty()
+  timezone: number;
+  @ApiProperty()
+  design: string;
+}

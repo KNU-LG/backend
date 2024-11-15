@@ -7,7 +7,8 @@ import {
     ForbiddenException,
     ParseIntPipe,
     Param,
-    Get
+    Get,
+    Put,
 } from '@nestjs/common';
 import { ClockWidgetService } from './clockWidget.service';
 import { APIResponse } from 'src/type';
@@ -17,6 +18,8 @@ import {
     CreateClockWidgetResponse,
     CreateClockWidgetRequest,
     GetClockWidgetResponse,
+    UpdateClockWidgetRequest,
+    UpdateClockWidgetResponse,
  } from './clockWidget.dto';
 
 @Controller('widget/clock')
@@ -76,6 +79,27 @@ export class ClockWidgetController {
         error: '',
         statusCode: 200,
         data: result,
+      };
+    }
+
+    @Put(':clockWidgetId')
+    @ApiSecurity('authorization')
+    @UseGuards(AuthGuard)
+    async updateClockWidget(
+      @Request() req,
+      @Body() data: UpdateClockWidgetRequest,
+      @Param('clockWidgetId', ParseIntPipe) id: number,
+    ): Promise<APIResponse<UpdateClockWidgetResponse>> {
+      await this.validateClockWidgetId(req.user.id, id);
+      const result = await this.clockWidgetService.updateClockWidgetById(
+        id,
+        data,
+      );
+      return {
+        data: result,
+        error: '',
+        message: 'success',
+        statusCode: 200,
       };
     }
   }
