@@ -4,8 +4,8 @@ import { ClockWidgetController } from './clockWidget.controller';
 import { ClockWidgetService } from './clockWidget.service';
 
 @Module({
-    controllers: [ClockWidgetController],
-    providers: [ClockWidgetService, PrismaService],
-    exports: [ClockWidgetService],
+  controllers: [ClockWidgetController],
+  providers: [ClockWidgetService, PrismaService],
+  exports: [ClockWidgetService],
 })
 export class ClockWidgetModule {}

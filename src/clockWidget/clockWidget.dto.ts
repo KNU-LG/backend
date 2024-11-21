@@ -47,6 +47,4 @@ export class UpdateClockWidgetResponse {
   design: string;
 }
 
-export class DeleteClockWidgetResponse {
-
-}
+export class DeleteClockWidgetResponse {}
