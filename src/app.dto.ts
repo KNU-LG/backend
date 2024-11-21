@@ -4,7 +4,6 @@ import {
   ClockWidgetSetting,
   MusicPlayWidgetSetting,
   WeatherWidgetSetting,
-  WidgetColor,
   WidgetSize,
 } from '@prisma/client';
 import { IsEnum } from 'class-validator';
@@ -37,7 +36,4 @@ export class WidgetCommonDto {
   @ApiProperty({ enum: WidgetSize })
   @IsEnum(WidgetSize)
   size: WidgetSize;
-  @ApiProperty({ enum: WidgetColor })
-  @IsEnum(WidgetColor)
-  color: WidgetColor;
 }

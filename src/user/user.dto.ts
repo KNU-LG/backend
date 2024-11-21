@@ -46,6 +46,8 @@ export class UpdateUserRequest {
   name: string;
   @ApiProperty()
   mode: $Enums.ScreenMode;
+  @ApiProperty()
+  theme: $Enums.ColorTheme;
 }
 
 export class ChangePasswordResponse {}
@@ -61,6 +63,8 @@ export class GetUserResponse {
   name: string;
   @ApiProperty()
   mode: $Enums.ScreenMode;
+  @ApiProperty()
+  theme: $Enums.ColorTheme;
 }
 
 export class UpdateUserResponse extends GetUserResponse {}

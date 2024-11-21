@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ColorTheme {
+  DARK
+  LIGHT
+}
+
 enum ScreenMode {
   IMAGE
   WIDGET
@@ -22,12 +27,6 @@ enum WidgetSize {
   L
   M
   S
-}
-
-enum WidgetColor {
-  DEFAULT
-  WHITE
-  BLACK
 }
 
 enum ClockDesign {
@@ -41,6 +40,7 @@ model User {
   loginId String @unique
   name  String? 
   password String
+  theme ColorTheme @default(LIGHT)
   mode ScreenMode
   weatherWidgetSetting WeatherWidgetSetting[]
   calendarWidgetSetting CalendarWidgetSetting[]
@@ -56,7 +56,6 @@ model SettingCommon {
   positionX Int
   positionY Int
   size WidgetSize
-  color WidgetColor
 
   weatherWidgetSetting WeatherWidgetSetting?
   calendarWidgetSetting CalendarWidgetSetting?
