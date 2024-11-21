@@ -44,9 +44,9 @@ export class UpdateUserRequest {
   email: string;
   @ApiProperty()
   name: string;
-  @ApiProperty()
+  @ApiProperty({ enum: $Enums.ScreenMode })
   mode: $Enums.ScreenMode;
-  @ApiProperty()
+  @ApiProperty({ enum: $Enums.ColorTheme })
   theme: $Enums.ColorTheme;
 }
 
@@ -61,9 +61,9 @@ export class GetUserResponse {
   email: string;
   @ApiProperty()
   name: string;
-  @ApiProperty()
+  @ApiProperty({ enum: $Enums.ScreenMode })
   mode: $Enums.ScreenMode;
-  @ApiProperty()
+  @ApiProperty({ enum: $Enums.ColorTheme })
   theme: $Enums.ColorTheme;
 }
 
