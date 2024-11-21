@@ -12,6 +12,7 @@ import { CalendarWidgetModule } from './calendarWidget/calenderWidget.module';
 import { ClockWidgetModule } from './clockWidget/clockWidget.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { SlideShowModule } from './slideShow/slideShow.module';
+import { MusicWidgetModule } from './musicWidget/musicWidget.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SlideShowModule } from './slideShow/slideShow.module';
     ClockWidgetModule,
     ScheduleModule,
     SlideShowModule,
+    MusicWidgetModule,
     //맨 마지막에 고정
     ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
   ],
