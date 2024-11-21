@@ -32,9 +32,10 @@ import { SlideShowModule } from './slideShow/slideShow.module';
     UserModule,
     CalendarWidgetModule,
     ClockWidgetModule,
-    ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
     ScheduleModule,
     SlideShowModule,
+    //맨 마지막에 고정
+    ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
