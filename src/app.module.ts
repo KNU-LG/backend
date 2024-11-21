@@ -11,6 +11,7 @@ import { join } from 'path';
 import { CalendarWidgetModule } from './calendarWidget/calenderWidget.module';
 import { ClockWidgetModule } from './clockWidget/clockWidget.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { SlideShowModule } from './slideShow/slideShow.module';
 
 @Module({
   imports: [
@@ -31,9 +32,9 @@ import { ScheduleModule } from './schedule/schedule.module';
     UserModule,
     CalendarWidgetModule,
     ClockWidgetModule,
-    //ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
+    ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
     ScheduleModule,
-    //ServeStaticModule.forRoot({ rootPath: join(env.HOME, 'capstone-media') }),
+    SlideShowModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
