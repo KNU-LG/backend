@@ -31,7 +31,6 @@ export class UserService {
         mode: true,
         name: true,
         loginId: true,
-        theme: true,
       },
       where: {
         id: id,
@@ -65,7 +64,6 @@ export class UserService {
         password: this.hashPassword(userRequest.password),
         name: userRequest.name,
         mode: 'WIDGET',
-        theme: 'LIGHT',
       },
     });
   }
@@ -106,7 +104,6 @@ export class UserService {
         id: true,
         loginId: true,
         email: true,
-        theme: true,
         mode: true,
         name: true,
       },

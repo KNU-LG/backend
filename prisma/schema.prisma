@@ -13,11 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ColorTheme {
-  DARK
-  LIGHT
-}
-
 enum ScreenMode {
   IMAGE
   WIDGET
@@ -46,7 +41,6 @@ model User {
   loginId String @unique
   name  String? 
   password String
-  theme ColorTheme
   mode ScreenMode
   weatherWidgetSetting WeatherWidgetSetting[]
   calendarWidgetSetting CalendarWidgetSetting[]
