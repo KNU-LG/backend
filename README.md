@@ -118,4 +118,4 @@ API문서는 swagger로 관리합니다. nestjs의 swagger 모듈을 활용해 A
 
 ## License
 
-프로젝트는 xxx 라이선스입니다. [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+프로젝트는 MIT 라이선스입니다. [MIT licensed](https://github.com/KNU-LG/backend/blob/main/LICENSE)
