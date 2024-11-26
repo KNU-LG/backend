@@ -1,3 +1,121 @@
+# KNU Capstone Design Project 1 Backend Repository
+
+## Tech Stack
+
+<div align="center">
+<img src="https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"/>
+<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"/>
+<img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white"/>
+<img src="https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white"/>
+<img src="https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white"/>
+<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white"/>
+<img src="https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white"/>
+<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white"/>
+</div>
+
+## Server Setup
+
+The project uses **Yarn 4.5.0** as its package manager, managed as a `.cjs` file in `.yarn/releases`. It requires Node.js version **18 or higher**, and has been tested with version **22.5.1**.
+
+### Environment Variables
+
+Before running the project, you need to create an `.env` file in the project root. An example `.env` file is provided as `example.env`. Below are the descriptions of the environment variables:
+
+- **PORT**: Port number on which the server will run. Ensure proper port forwarding in your firewall or router.
+- **DATABASE_URL**: URL for accessing the PostgreSQL database.
+- **PASSWORD_ROUND**: Integer value used for password hashing. A value between 1 and 100 is recommended.
+- **JWT_SECRET**: String used for generating JWT tokens. Use a secure and non-obvious value.
+- **MAIL_USER**: The email address used for sending emails in the password recovery API. Configuration details are provided below.
+- **MAIL_PASSWORD**: The password associated with the email account specified in `MAIL_USER`.
+
+### Email Configuration
+
+The `find_password` API works by sending emails. The following instructions explain how to configure a Gmail account:
+
+![gmail-1](gmail-1.png)
+
+1. Log in to your Gmail account, click the gear icon at the top right, and select "See all settings."
+
+![gmail-2](gmail-2.png)
+
+2. Navigate to the **Forwarding and POP/IMAP** tab, enable IMAP access, and save the changes.
+
+Set your Gmail address as the value for the `MAIL_USER` environment variable.
+
+![gmail-3](gmail-3.png)
+
+3. Go to your Google Account settings and search for **App Passwords**. Generate an app password for Gmail. Copy the 16-character password and set it as the value for the `MAIL_PASSWORD` environment variable.
+
+### Database Configuration
+
+Ensure that the database is accessible using the `DATABASE_URL` environment variable. It is recommended to use Docker and Docker Compose for setting up PostgreSQL. Below is an example `docker-compose.yml` file for configuring the database:
+
+```yml
+services:
+  db:
+    image: postgres:17
+    container_name: postgres
+    restart: always
+    ports:
+      - '40001:5432'
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./data/postgres/:/var/lib/postgresql/data
+```
+
+- **image**: Specifies the PostgreSQL image version (17).
+- **container_name**: The name of the container. You can set this to any value.
+- **restart**: Ensures the container always restarts, even after a server reboot.
+- **ports**: Maps the container’s PostgreSQL port (5432) to a port on the host machine.
+- **environment**: Sets the environment variables for the PostgreSQL image, including the database password.
+- **volumes**: Maps a local directory to the container’s PostgreSQL data directory.
+
+For more details on the PostgreSQL Docker image, visit the [official documentation](https://hub.docker.com/_/postgres).
+
+If you prefer not to use Docker, you can set up PostgreSQL locally, but the `DATABASE_URL` environment variable must still ensure proper connectivity.
+
+### Install Project Dependencies
+
+After completing all configurations, run the following command to install project dependencies:
+
+```bash
+$ yarn install
+```
+
+### Compile and Run the Project
+
+Use one of the following commands to run the project. The server will use the port specified in the `PORT` environment variable.
+
+```bash
+# development
+$ yarn run start
+
+# watch mode
+$ yarn run start:dev
+
+# production mode
+$ yarn run start:prod
+```
+
+## ER Diagram
+
+The project uses PostgreSQL as the database and Prisma as the ORM. The schema definition can be found in `prisma/schema.prisma`. Below is the ER diagram generated from this schema:
+
+![ERD](er-diagram.png)
+
+## API Documentation
+
+API documentation is managed using **Swagger**. The Swagger module in NestJS is used for API testing and documentation. Contributions for missing documentation are welcome.
+
+You can access the API documentation by visiting `/document` after starting the project.
+
+![api-doc](api-doc.png)
+
+## License
+
+This project is licensed under the MIT License. [MIT licensed](https://github.com/KNU-LG/backend/blob/main/LICENSE).
+
 # KNU 종합설계프로젝트1 백엔드 레포지토리
 
 ## 기술 스택
