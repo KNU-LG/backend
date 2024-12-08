@@ -13,6 +13,14 @@
 <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white"/>
 </div>
 
+## Clone Project
+
+You can clone project source code at github.
+
+```
+git clone https://github.com/KNU-LG/backend
+```
+
 ## Server Setup
 
 The project uses **Yarn 4.5.0** as its package manager, managed as a `.cjs` file in `.yarn/releases`. It requires Node.js version **18 or higher**, and has been tested with version **22.5.1**.
